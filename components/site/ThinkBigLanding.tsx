@@ -10,7 +10,7 @@ import { useEffect, useRef, useState, type MouseEvent } from 'react';
    Tous les boutons "Réserver" ouvriront alors un POPUP Calendly
    (créneaux + anti-double-réservation + Google Meet). Vide = ancre #book.
    ============================================================ */
-const CALENDLY_URL = ''; // ex : "https://calendly.com/ton-compte/appel-strategique-30min"
+const CALENDLY_URL = 'https://calendly.com/manager-vizualagency/appel-strategique';
 
 /* Marque : double slash orange (réutilisée partout) */
 const LogoMark = ({ className }: { className?: string }) => (
