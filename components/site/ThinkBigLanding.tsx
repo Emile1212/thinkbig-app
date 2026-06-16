@@ -102,13 +102,19 @@ export default function ThinkBigLanding() {
 
   /* Réservation : ouvre le popup Calendly si un lien est configuré */
   const handleBook = (e: MouseEvent<HTMLAnchorElement>) => {
+    if (!CALENDLY_URL) return;
     const C = (window as unknown as {
       Calendly?: { initPopupWidget: (o: { url: string }) => void };
     }).Calendly;
-    if (CALENDLY_URL && C) {
+    if (C && typeof C.initPopupWidget === 'function') {
       e.preventDefault();
-      C.initPopupWidget({ url: CALENDLY_URL });
+      try {
+        C.initPopupWidget({ url: CALENDLY_URL });
+      } catch {
+        window.open(CALENDLY_URL, '_blank', 'noopener,noreferrer');
+      }
     }
+    // sinon : le lien (href + target _blank) ouvre Calendly dans un nouvel onglet
   };
   const bookAttrs = CALENDLY_URL
     ? { href: CALENDLY_URL, onClick: handleBook, target: '_blank', rel: 'noopener noreferrer' }
