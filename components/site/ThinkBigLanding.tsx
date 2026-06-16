@@ -1,16 +1,16 @@
 'use client';
 
-import { useEffect, useRef, useState } from 'react';
+import { useEffect, useRef, useState, type MouseEvent } from 'react';
 
 /* ============================================================
-   CONFIG — Lien de réservation
-   Remplace par ton lien Calendly / Cal.com. Tous les CTA l'utilisent.
+   RÉSERVATION — Calendly
+   1. Crée un événement "Appel stratégique 30 min" sur calendly.com
+      (mets le lieu = Google Meet pour générer un lien Meet auto).
+   2. Colle ton lien Calendly ci-dessous.
+   Tous les boutons "Réserver" ouvriront alors un POPUP Calendly
+   (créneaux + anti-double-réservation + Google Meet). Vide = ancre #book.
    ============================================================ */
-const BOOKING_URL = ''; // ex : "https://calendly.com/thinkbig/appel-strategique"
-const bookHref = BOOKING_URL || '#book';
-const bookProps = BOOKING_URL
-  ? { href: BOOKING_URL, target: '_blank', rel: 'noopener noreferrer' }
-  : { href: '#book' };
+const CALENDLY_URL = ''; // ex : "https://calendly.com/ton-compte/appel-strategique-30min"
 
 /* Marque : double slash orange (réutilisée partout) */
 const LogoMark = ({ className }: { className?: string }) => (
@@ -100,6 +100,34 @@ export default function ThinkBigLanding() {
   const [openFaq, setOpenFaq] = useState<number | null>(null);
   const rootRef = useRef<HTMLDivElement | null>(null);
 
+  /* Réservation : ouvre le popup Calendly si un lien est configuré */
+  const handleBook = (e: MouseEvent<HTMLAnchorElement>) => {
+    const C = (window as unknown as {
+      Calendly?: { initPopupWidget: (o: { url: string }) => void };
+    }).Calendly;
+    if (CALENDLY_URL && C) {
+      e.preventDefault();
+      C.initPopupWidget({ url: CALENDLY_URL });
+    }
+  };
+  const bookAttrs = CALENDLY_URL
+    ? { href: CALENDLY_URL, onClick: handleBook, target: '_blank', rel: 'noopener noreferrer' }
+    : { href: '#book' };
+
+  /* Charge le widget Calendly (CSS + JS) une seule fois si un lien est défini */
+  useEffect(() => {
+    if (!CALENDLY_URL || document.getElementById('calendly-widget-js')) return;
+    const css = document.createElement('link');
+    css.rel = 'stylesheet';
+    css.href = 'https://assets.calendly.com/assets/external/widget.css';
+    document.head.appendChild(css);
+    const js = document.createElement('script');
+    js.id = 'calendly-widget-js';
+    js.src = 'https://assets.calendly.com/assets/external/widget.js';
+    js.async = true;
+    document.body.appendChild(js);
+  }, []);
+
   /* Nav : état au scroll */
   useEffect(() => {
     const onScroll = () => setScrolled(window.scrollY > 40);
@@ -180,7 +208,7 @@ export default function ThinkBigLanding() {
           <a href="#processus" className="nav-link" onClick={() => setMenuOpen(false)}>Processus</a>
           <a href="#resultats" className="nav-link" onClick={() => setMenuOpen(false)}>Résultats</a>
           <a href="#faq" className="nav-link" onClick={() => setMenuOpen(false)}>FAQ</a>
-          <a {...bookProps} className="nav-cta" onClick={() => setMenuOpen(false)}>Réserver un appel</a>
+          <a {...bookAttrs} className="nav-cta" onClick={() => setMenuOpen(false)}>Réserver un appel</a>
         </div>
         <button
           className="nav-toggle"
@@ -207,7 +235,7 @@ export default function ThinkBigLanding() {
             <strong>Stratégie claire, créatives qui convertissent, tracking fiable.</strong>
           </p>
           <div className="hero-actions">
-            <a {...bookProps} className="btn-primary">
+            <a {...bookAttrs} className="btn-primary">
               Réserver un appel stratégique <span className="arrow">→</span>
             </a>
             <a href="#processus" className="btn-ghost">Voir notre processus</a>
@@ -268,7 +296,7 @@ export default function ThinkBigLanding() {
                 On ne te vend pas « des pubs ». On bâtit la machine au complet, de la stratégie au rapport, et on la garde performante chaque semaine.
               </p>
               <div style={{ marginTop: '34px' }}>
-                <a {...bookProps} className="btn-primary">
+                <a {...bookAttrs} className="btn-primary">
                   Réserver un appel stratégique <span className="arrow">→</span>
                 </a>
               </div>
@@ -444,7 +472,7 @@ export default function ThinkBigLanding() {
                 Pour garder la qualité de notre travail, on ne prend qu'un nombre restreint de nouveaux comptes chaque mois. On commence par un appel pour s'assurer qu'on est le bon match.
               </p>
               <div className="offer-cta">
-                <a {...bookProps} className="btn-primary" style={{ width: '100%', justifyContent: 'center' }}>
+                <a {...bookAttrs} className="btn-primary" style={{ width: '100%', justifyContent: 'center' }}>
                   Postuler pour travailler avec nous <span className="arrow">→</span>
                 </a>
                 <p className="offer-fine">Appel de 30 minutes, sans engagement.</p>
@@ -489,7 +517,7 @@ export default function ThinkBigLanding() {
           <p className="cta-final-sub">
             On commence par un appel stratégique de 30 minutes pour comprendre ta situation et voir comment on peut t'aider. Sans engagement.
           </p>
-          <a {...bookProps} className="btn-primary" style={{ fontSize: '16px', padding: '19px 42px' }}>
+          <a {...bookAttrs} className="btn-primary" style={{ fontSize: '16px', padding: '19px 42px' }}>
             Réserver un appel stratégique <span className="arrow">→</span>
           </a>
           <p className="cta-note">Réponse sous 24 h. Places limitées chaque mois.</p>
@@ -520,7 +548,7 @@ export default function ThinkBigLanding() {
             </div>
             <div className="footer-col">
               <h4>Contact</h4>
-              <a {...bookProps}>Réserver un appel</a>
+              <a {...bookAttrs}>Réserver un appel</a>
               <a href="mailto:bonjour@tonsite.com">Courriel</a>
               <a href="#" target="_blank" rel="noopener noreferrer">Instagram</a>
             </div>
