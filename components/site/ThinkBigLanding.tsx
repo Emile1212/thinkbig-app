@@ -555,7 +555,7 @@ export default function ThinkBigLanding() {
             <div className="footer-col">
               <h4>Contact</h4>
               <a {...bookAttrs}>Réserver un appel</a>
-              <a href="mailto:bonjour@tonsite.com">Courriel</a>
+              <a href="mailto:bonjour@wethinkbigmarketing.com">Courriel</a>
               <a href="#" target="_blank" rel="noopener noreferrer">Instagram</a>
             </div>
           </div>

@@ -17,8 +17,11 @@ export const metadata: Metadata = {
     "Québec",
   ],
   authors: [{ name: "Think Big Marketing Agency" }],
+  metadataBase: new URL("https://wethinkbigmarketing.com"),
+  alternates: { canonical: "/" },
   openGraph: {
     type: "website",
+    url: "https://wethinkbigmarketing.com",
     title: "Think Big - Agence de publicité Meta & Google Ads",
     description:
       "On transforme ton budget pub en clients qui paient. Créatives, gestion de campagnes, tracking et optimisation continue.",
@@ -38,6 +41,7 @@ const jsonLd = {
     "Agence de publicité spécialisée en Meta Ads et Google Ads pour PME.",
   areaServed: "CA",
   serviceType: ["Meta Ads", "Google Ads", "Génération de leads", "Stratégie créative"],
+  url: "https://wethinkbigmarketing.com",
 };
 
 export default function RootLayout({
