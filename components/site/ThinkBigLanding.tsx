@@ -551,6 +551,7 @@ export default function ThinkBigLanding() {
               <a href="#approche">Approche</a>
               <a href="#processus">Processus</a>
               <a href="#resultats">Résultats</a>
+              <a href="/politique-de-confidentialite">Confidentialité</a>
             </div>
             <div className="footer-col">
               <h4>Contact</h4>
